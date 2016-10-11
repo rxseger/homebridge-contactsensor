@@ -23,6 +23,7 @@ GPIO.setup(switches, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 def handle(pin):
 	state = GPIO.input(pin)
+	# TODO: sync writing to output to avoid clobbering others!
 	print pin,state
 
 # trigger for all on both rising and falling edges

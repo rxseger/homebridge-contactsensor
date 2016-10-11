@@ -1,5 +1,8 @@
 'use strict';
 
+const path = require('path');
+const child_process = require('child_process');
+
 let Service, Characteristic;
 
 module.exports = (homebridge) => {
@@ -26,27 +29,48 @@ class ContactSensorPlugin
       "Switch C": 22
     };
 
+    this.pin2contact = {};
     this.contacts = [];
+    const helperPath = path.join(__dirname, 'watchpins.py');
+    const args = ['-u', helperPath];
 
     for (let name of Object.keys(this.pins)) {
-      let pin = this.pins[name];
+      const pin = this.pins[name];
 
-      const contact = new Service.ContactSensor(name);
+      const subtype = name; 
+      const contact = new Service.ContactSensor(name, subtype);
       contact
         .getCharacteristic(Characteristic.ContactSensorState)
         .setValue(true);
 
+      this.pin2contact[pin] = contact;
       this.contacts.push(contact);
+      args.push(''+pin);
     }
+    console.log('contact sensors', this.pin2contact);
+    this.helper = child_process.spawn('python', args);
 
-    this.humidityService = new Service.HumiditySensor(this.name_humidity);
-    this.humidityService
-      .getCharacteristic(Characteristic.CurrentRelativeHumidity)
-      .on('get', this.getCurrentRelativeHumidity.bind(this));
+    this.helper.stderr.on('data', (err) => {
+      throw new Error(`watchpins helper error: ${err})`);
+    }); 
+
+    this.helper.stdout.on('data', (data) => {
+      console.log(`data = |${data}|`); 
+      let [pin, state] = data.toString().trim().split(' ');
+      pin = parseInt(pin, 10);
+      state = !!parseInt(state, 10);
+      console.log(`pin ${pin} changed state to ${state}`);
+
+      const contact = this.pin2contact[pin];
+      if (!contact) throw new Error(`received pin event for unconfigured pin: ${pin}`);
+      contact
+        .getCharacteristic(Characteristic.ContactSensorState)
+        .setValue(state);
+    });
   }
 
   getServices() {
-    return [this.contacts];
+    return this.contacts;
   }
 }
 
