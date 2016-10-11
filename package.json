@@ -1,6 +1,6 @@
 {
   "name": "homebridge-contactsensor",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "Contact sensor interrupt GPIO input plugin for Homebridge",
   "main": "contact.js",
   "scripts": {
