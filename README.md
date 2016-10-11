@@ -31,10 +31,10 @@ Example configuration:
             "accessory": "ContactSensor",
             "name": "Contact Sensors",
             "pins": {
-		"Switch A": 24,
-		"Switch B": 26,
-		"Switch C": 22
-	    }
+                "Switch A": 24,
+                "Switch B": 26,
+                "Switch C": 22
+            }
         }
     ]
 ```
