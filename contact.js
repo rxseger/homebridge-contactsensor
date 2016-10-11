@@ -55,17 +55,20 @@ class ContactSensorPlugin
     }); 
 
     this.helper.stdout.on('data', (data) => {
-      console.log(`data = |${data}|`); 
-      let [pin, state] = data.toString().trim().split(' ');
-      pin = parseInt(pin, 10);
-      state = !!parseInt(state, 10);
-      console.log(`pin ${pin} changed state to ${state}`);
-
-      const contact = this.pin2contact[pin];
-      if (!contact) throw new Error(`received pin event for unconfigured pin: ${pin}`);
-      contact
-        .getCharacteristic(Characteristic.ContactSensorState)
-        .setValue(state);
+      console.log(`data = |${data}|`);
+      const lines = data.toString().trim().split('\n');
+      for (let line of lines) {
+        let [pin, state] = line.trim().split(' ');
+        pin = parseInt(pin, 10);
+        state = !!parseInt(state, 10);
+        console.log(`pin ${pin} changed state to ${state}`);
+  
+        const contact = this.pin2contact[pin];
+        if (!contact) throw new Error(`received pin event for unconfigured pin: ${pin}`);
+        contact
+          .getCharacteristic(Characteristic.ContactSensorState)
+          .setValue(state);
+      }
     });
   }
 
