@@ -1,5 +1,6 @@
 #!/usr/bin/python
 # watchpins.py - listen for and log GPIO input changes using interrupts
+# implementation note: why is this Python not Node? see same reasons in https://github.com/rxseger/homebridge-pwm-fan/blob/master/pwmfanhelper.py and TODO: fix
 
 import RPi.GPIO as GPIO
 import sys
