@@ -4,6 +4,7 @@
 import RPi.GPIO as GPIO
 import sys
 import time
+import threading
 
 GPIO.setmode(GPIO.BOARD)
 
@@ -21,10 +22,15 @@ program will log, once per line, the pin, a space, and the new state.
 GPIO.setwarnings(False)
 GPIO.setup(switches, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
+write_lock = threading.Lock()
+
 def handle(pin):
 	state = GPIO.input(pin)
-	# TODO: sync writing to output to avoid clobbering others!
-	print pin,state
+
+	write_lock.acquire()
+	sys.stdout.write('%s %s\n' % (pin, state))
+	sys.stdout.flush()
+	write_lock.release()
 
 # trigger for all on both rising and falling edges
 for pin in switches:
