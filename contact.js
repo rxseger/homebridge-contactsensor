@@ -41,7 +41,7 @@ class ContactSensorPlugin
       const contact = new Service.ContactSensor(name, subtype);
       contact
         .getCharacteristic(Characteristic.ContactSensorState)
-        .setValue(true);
+        .setValue(false);
 
       this.pin2contact[pin] = contact;
       this.contacts.push(contact);
