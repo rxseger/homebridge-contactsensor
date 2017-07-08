@@ -37,4 +37,9 @@ def handle(pin):
 for pin in switches:
 	GPIO.add_event_detect(pin, GPIO.BOTH, handle)
 
+GPIO.setup(switches, GPIO.OUT)
+GPIO.output(switches, GPIO.LOW)
+GPIO.setup(switches, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+
+
 while True: time.sleep(1e6)
