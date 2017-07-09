@@ -47,7 +47,6 @@ class ContactSensorPlugin
       this.contacts.push(contact);
       args.push(''+pin);
     }
-    sleep(3000);
     console.log('contact sensors', this.pin2contact);
     this.helper = child_process.spawn('python', args);
 
@@ -76,10 +75,4 @@ class ContactSensorPlugin
   getServices() {
     return this.contacts;
   }
-}
-
-function sleep(ms) {
-  var start = new Date().getTime(), expire = start + ms;
-  while (new Date().getTime() < expire) { }
-  return;
 }

@@ -40,6 +40,7 @@ for pin in switches:
 GPIO.setup(switches, GPIO.OUT)
 GPIO.output(switches, GPIO.LOW)
 GPIO.setup(switches, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+time.sleep(3e6)
 GPIO.setup(switches, GPIO.OUT)
 GPIO.output(switches, GPIO.LOW)
 GPIO.setup(switches, GPIO.IN, pull_up_down=GPIO.PUD_UP)
