@@ -76,4 +76,3 @@ class ContactSensorPlugin
     return this.contacts;
   }
 }
-
